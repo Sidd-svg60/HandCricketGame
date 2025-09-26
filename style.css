@@ -1,27 +1,126 @@
+/* ---------- GENERAL ---------- */
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #f5e6d3; /* vintage parchment */
+  color: #3e2f1c; /* dark brown text */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
 }
 
-#game, #lobby {
-    background-color: #fff;
-    display: inline-block;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+.container {
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+  text-align: center;
 }
 
+/* ---------- HEADER ---------- */
+header h1 {
+  font-size: 2em;
+  color: #5c3a21;
+  margin-bottom: 0;
+}
+
+.subtitle {
+  font-size: 1em;
+  color: #7b5e44;
+  margin-top: 5px;
+}
+
+/* ---------- CARDS ---------- */
+.card {
+  background-color: #fff1e0; /* vintage cream */
+  border: 2px solid #d9b382;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+}
+
+/* ---------- BUTTONS ---------- */
+.btn {
+  background-color: #d9b382; /* vintage gold */
+  color: #3e2f1c;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background-color: #c79b5d;
+}
+
+/* Specific buttons */
+.start {
+  background-color: #a9745b;
+  color: #fff;
+}
+
+.start:hover {
+  background-color: #936648;
+}
+
+.play {
+  background-color: #5c3a21;
+  color: #fff;
+}
+
+.play:hover {
+  background-color: #482e18;
+}
+
+/* ---------- INPUTS ---------- */
 input {
-    width: 50px;
-    text-align: center;
+  padding: 8px;
+  border: 2px solid #d9b382;
+  border-radius: 5px;
+  width: 80px;
+  text-align: center;
+  margin: 5px;
 }
 
-#log {
-    margin-top: 20px;
-    max-height: 200px;
-    overflow-y: auto;
-    text-align: left;
+/* ---------- SCORE & LOG ---------- */
+.score {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.log {
+  margin-top: 15px;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 0.9em;
+  padding: 5px;
+  background-color: #fff3e0;
+  border-radius: 5px;
+  border: 1px solid #d9b382;
+}
+
+/* ---------- LOBBY LIST ---------- */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #fff3e0;
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #d9b382;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  margin-top: 30px;
+  font-size: 0.8em;
+  color: #7b5e44;
 }

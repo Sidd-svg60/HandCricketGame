@@ -1,34 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hand Cricket Multiplayer - India Index</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1v1 Hand Cricket</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 </head>
 <body>
-    <h1>Hand Cricket Multiplayer - India Index</h1>
+  <div class="container">
+
+    <header>
+      <h1>🎩 1v1 Hand Cricket 🎩</h1>
+      <p class="subtitle">Challenge your friend in real-time!</p>
+    </header>
+
+    <!-- Game ID section -->
+    <section id="game-id-section" class="card">
+      <button class="btn" id="host-btn">Host Game</button>
+      <input type="text" id="join-id" placeholder="Enter Game ID">
+      <button class="btn" id="join-btn">Join Game</button>
+      <p id="generated-id" class="generated-id"></p>
+    </section>
 
     <!-- Lobby -->
-    <div id="lobby">
-        <h2>Lobby</h2>
-        <ul id="players"></ul>
-        <button id="start-btn">Start Game</button>
-    </div>
+    <section id="lobby" class="card" style="display:none">
+      <h2>Lobby</h2>
+      <p>Players in lobby:</p>
+      <ul id="players"></ul>
+      <button class="btn start" id="start-btn">Start Game</button>
+    </section>
 
     <!-- Game -->
-    <div id="game" style="display:none">
-        <h2>Game</h2>
-        <div id="scoreboard">
-            <p id="team1-score">Team 1: 0</p>
-            <p id="team2-score">Team 2: 0</p>
-        </div>
-        <input type="number" id="player-input" min="1" max="6" placeholder="Enter 1-6">
-        <button id="submit-btn">Play</button>
-        <div id="log"></div>
-    </div>
+    <section id="game" class="card" style="display:none">
+      <h2>Match Started</h2>
+      <p id="score" class="score">Score: 0 - 0</p>
+      <input type="number" id="player-input" min="1" max="6" placeholder="1-6">
+      <button class="btn play" id="submit-btn">Play</button>
+      <div id="log" class="log"></div>
+    </section>
 
-    <script src="script.js"></script>
+    <footer>
+      <p>Developed by Siddhant</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
