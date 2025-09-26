@@ -19,7 +19,7 @@ const logDiv = document.getElementById('log');
 const turnInfo = document.getElementById('turn-info');
 
 // ---------- Variables ----------
-let playerId = Math.floor(Math.random() * 100000); 
+let playerId = Math.floor(Math.random() * 100000);
 let gameId = null;
 let channel = null;
 let players = [];
@@ -28,24 +28,10 @@ let turnIndex = 0;
 let maxTurns = 4;
 let currentTurn = 1;
 
-// ---------- HOST ----------
-hostBtn.addEventListener('click', () => {
-    gameId = Math.floor(10000 + Math.random() * 90000).toString();
-    generatedIdEl.innerText = `Game ID: ${gameId}`;
-    setupChannel();
-    addPlayerToLobby();
-});
+// ---------- Debug log ----------
+function logDebug(msg){ logDiv.innerHTML += `<p style="color:red">${msg}</p>`; }
 
-// ---------- JOIN ----------
-joinBtn.addEventListener('click', () => {
-    const enteredId = joinIdInput.value.trim();
-    if(!enteredId) return alert("Enter Game ID");
-    gameId = enteredId;
-    setupChannel();
-    addPlayerToLobby();
-});
-
-// ---------- CHANNEL ----------
+// ---------- Functions ----------
 function setupChannel() {
     channel = supabase.channel('game-' + gameId);
 
@@ -60,73 +46,96 @@ function setupChannel() {
         turnIndex = 0;
         currentTurn = 1;
         updateTurnUI();
-        logDiv.innerHTML += `<p>Game Started! Player ${players[turnIndex]} starts.</p>`;
+        logDebug(`Game Started! Player ${players[turnIndex]} starts.`);
     });
 
-    channel.on('broadcast', {event:'move'}, payload => {
-        processMove(payload);
-    });
+    channel.on('broadcast', {event:'move'}, payload => { processMove(payload); });
 
-    channel.subscribe();
+    channel.subscribe().then(() => addPlayerToLobby());
 }
 
-// ---------- ADD TO LOBBY ----------
-function addPlayerToLobby() {
+function addPlayerToLobby(){
     channel.send({type:'broadcast', event:'join', payload:{playerId}});
 }
 
-// ---------- UPDATE LOBBY ----------
-function updateLobbyUI() {
+function updateLobbyUI(){
     playersList.innerHTML = '';
-    players.forEach((p,i) => {
+    players.forEach((p,i)=>{
         const li = document.createElement('li');
         li.innerText = `Player ${i+1}: ${p}`;
         playersList.appendChild(li);
     });
 }
 
-// ---------- START GAME ----------
-startBtn.addEventListener('click', () => {
-    if(players.length < 2) return alert('Wait for another player!');
-    channel.send({type:'broadcast', event:'start', payload:{}});
-});
-
-// ---------- SUBMIT MOVE ----------
-submitBtn.addEventListener('click', () => {
-    if(players[turnIndex] !== playerId) return alert("Wait for your turn!");
-    const num = parseInt(playerInput.value);
-    if(num < 1 || num > 6) return alert('Enter 1-6');
-    channel.send({type:'broadcast', event:'move', payload:{playerId,num,turn:currentTurn}});
-    playerInput.value='';
-});
-
-// ---------- PROCESS MOVE ----------
-function processMove(payload) {
-    const playerIndex = players.indexOf(payload.playerId);
-    score[playerIndex] += payload.num;
-    scoreEl.innerText = `Score: ${score[0]} - ${score[1]}`;
-    logDiv.innerHTML += `<p>Player ${payload.playerId} played ${payload.num}</p>`;
-
-    if(currentTurn >= maxTurns) {
-        logDiv.innerHTML += `<p>Game Over! Final Score: ${score[0]} - ${score[1]}</p>`;
-        playerInput.disabled = true;
-        submitBtn.disabled = true;
-        return;
-    }
-
-    // Switch turn
-    turnIndex = (turnIndex === 0) ? 1 : 0;
-    currentTurn++;
-    updateTurnUI();
-}
-
-// ---------- TURN UI ----------
-function updateTurnUI() {
-    if(players[turnIndex] === playerId) {
+function updateTurnUI(){
+    if(players[turnIndex] === playerId){
         playerInput.disabled = false;
         submitBtn.disabled = false;
         turnInfo.innerText = "Your turn!";
     } else {
         playerInput.disabled = true;
         submitBtn.disabled = true;
-        turnInfo.innerText = "Opponent's
+        turnInfo.innerText = "Opponent's turn";
+    }
+}
+
+function processMove(payload){
+    const idx = players.indexOf(payload.playerId);
+    score[idx] += payload.num;
+    scoreEl.innerText = `Score: ${score[0]} - ${score[1]}`;
+    logDebug(`Player ${payload.playerId} played ${payload.num}`);
+
+    if(currentTurn >= maxTurns){
+        logDebug(`Game Over! Final Score: ${score[0]} - ${score[1]}`);
+        playerInput.disabled = true;
+        submitBtn.disabled = true;
+        return;
+    }
+
+    turnIndex = (turnIndex === 0) ? 1 : 0;
+    currentTurn++;
+    updateTurnUI();
+}
+
+// ---------- Button Listeners ----------
+function hostGame(){ 
+    gameId = Math.floor(10000 + Math.random()*90000).toString();
+    generatedIdEl.innerText = `Game ID: ${gameId}`;
+    setupChannel();
+}
+
+function joinGame(){ 
+    const id = joinIdInput.value.trim();
+    if(!id) return alert("Enter Game ID");
+    gameId = id;
+    setupChannel();
+}
+
+function startGame(){
+    if(players.length < 2) return alert('Wait for another player!');
+    channel.send({type:'broadcast', event:'start', payload:{}});
+}
+
+function submitMove(){
+    if(players[turnIndex] !== playerId) return alert("Wait for your turn!");
+    const num = parseInt(playerInput.value);
+    if(num < 1 || num > 6) return alert("Enter 1-6");
+    channel.send({type:'broadcast', event:'move', payload:{playerId,num,turn:currentTurn}});
+    playerInput.value='';
+}
+
+// ---------- Mobile-friendly event listeners ----------
+[hostBtn, joinBtn, startBtn, submitBtn].forEach(btn=>{
+    btn.addEventListener('click', ()=>{ 
+        if(btn===hostBtn) hostGame();
+        if(btn===joinBtn) joinGame();
+        if(btn===startBtn) startGame();
+        if(btn===submitBtn) submitMove();
+    });
+    btn.addEventListener('touchstart', e=>{ e.preventDefault();
+        if(btn===hostBtn) hostGame();
+        if(btn===joinBtn) joinGame();
+        if(btn===startBtn) startGame();
+        if(btn===submitBtn) submitMove();
+    });
+});
