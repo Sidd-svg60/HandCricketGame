@@ -23,6 +23,9 @@ let gameId = null;
 let channel = null;
 let players = [];
 let score = {player1:0, player2:0};
+let turnIndex = 0; // 0 = player1, 1 = player2
+let maxTurns = 4;
+let currentTurn = 1;
 let isHost = false;
 
 // ---------- HOST GAME ----------
@@ -57,12 +60,13 @@ function setupChannel() {
     channel.on('broadcast', {event:'start'}, payload => {
         lobbyDiv.style.display = 'none';
         gameDiv.style.display = 'block';
-        logDiv.innerHTML += `<p>Game Started!</p>`;
+        logDiv.innerHTML += `<p>Game Started! Player ${players[turnIndex]} starts.</p>`;
+        updateTurnUI();
     });
 
     // Move listener
     channel.on('broadcast', {event:'move'}, payload => {
-        updateGame(payload);
+        processMove(payload);
     });
 
     channel.subscribe();
@@ -76,9 +80,9 @@ function addPlayerToLobby() {
 // ---------- UPDATE LOBBY ----------
 function updateLobbyUI() {
     playersList.innerHTML = '';
-    players.forEach(p => {
+    players.forEach((p,i) => {
         const li = document.createElement('li');
-        li.innerText = `Player ${p}`;
+        li.innerText = `Player ${i+1}: ${p}`;
         playersList.appendChild(li);
     });
 }
@@ -91,19 +95,17 @@ startBtn.addEventListener('click', () => {
 
 // ---------- SUBMIT MOVE ----------
 submitBtn.addEventListener('click', () => {
+    if(players[turnIndex] !== playerId) return alert("Wait for your turn!");
     const num = parseInt(playerInput.value);
     if(num < 1 || num > 6) return alert('Enter 1-6');
-    channel.send({type:'broadcast', event:'move', payload:{playerId, num}});
+    channel.send({type:'broadcast', event:'move', payload:{playerId, num, turn:currentTurn}});
     playerInput.value = '';
 });
 
-// ---------- UPDATE GAME ----------
-function updateGame(payload) {
-    if(!players[0] || !players[1]) return;
+// ---------- PROCESS MOVE ----------
+function processMove(payload) {
     const playerIndex = players.indexOf(payload.playerId);
     const opponentIndex = playerIndex === 0 ? 1 : 0;
-    const opponentId = players[opponentIndex] || '???';
-
     logDiv.innerHTML += `<p>Player ${payload.playerId} played ${payload.num}</p>`;
 
     // Update score
@@ -111,4 +113,30 @@ function updateGame(payload) {
     else score.player2 += payload.num;
 
     scoreEl.innerText = `Score: ${score.player1} - ${score.player2}`;
+
+    // Switch turn
+    if(payload.turn >= maxTurns) {
+        logDiv.innerHTML += `<p>Game Over! Final Score: ${score.player1} - ${score.player2}</p>`;
+        submitBtn.disabled = true;
+        playerInput.disabled = true;
+        return;
+    }
+
+    // Next turn
+    turnIndex = opponentIndex;
+    currentTurn++;
+    updateTurnUI();
+}
+
+// ---------- UPDATE TURN UI ----------
+function updateTurnUI() {
+    if(players[turnIndex] === playerId) {
+        playerInput.disabled = false;
+        submitBtn.disabled = false;
+        logDiv.innerHTML += `<p>Your turn!</p>`;
+    } else {
+        playerInput.disabled = true;
+        submitBtn.disabled = true;
+        logDiv.innerHTML += `<p>Opponent's turn.</p>`;
+    }
 }
