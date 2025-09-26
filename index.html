@@ -1,51 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1v1 Hand Cricket</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1v1 Hand Cricket</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 </head>
 <body>
-  <div class="container">
+<div class="container">
 
-    <header>
-      <h1>🎩 1v1 Hand Cricket 🎩</h1>
-      <p class="subtitle">Challenge your friend in real-time!</p>
-    </header>
+  <header>
+    <h1>🏏 1v1 Hand Cricket 🏏</h1>
+    <p class="subtitle">Challenge your friend in real-time!</p>
+  </header>
 
-    <!-- Game ID section -->
-    <section id="game-id-section" class="card">
-      <button class="btn" id="host-btn">Host Game</button>
+  <!-- Host / Join Section -->
+  <section id="game-id-section" class="card">
+    <button class="btn host-btn" id="host-btn">Host Game</button>
+    <div class="join-section">
       <input type="text" id="join-id" placeholder="Enter Game ID">
-      <button class="btn" id="join-btn">Join Game</button>
-      <p id="generated-id" class="generated-id"></p>
-    </section>
+      <button class="btn join-btn" id="join-btn">Join Game</button>
+    </div>
+    <p id="generated-id" class="generated-id"></p>
+  </section>
 
-    <!-- Lobby -->
-    <section id="lobby" class="card" style="display:none">
-      <h2>Lobby</h2>
-      <p>Players in lobby:</p>
-      <ul id="players"></ul>
-      <button class="btn start" id="start-btn">Start Game</button>
-    </section>
+  <!-- Lobby Section -->
+  <section id="lobby" class="card" style="display:none;">
+    <h2>Lobby</h2>
+    <ul id="players"></ul>
+    <button class="btn start-btn" id="start-btn">Start Game</button>
+  </section>
 
-    <!-- Game -->
-    <section id="game" class="card" style="display:none">
-      <h2>Match Started</h2>
-      <p id="score" class="score">Score: 0 - 0</p>
-      <input type="number" id="player-input" min="1" max="6" placeholder="1-6">
-      <button class="btn play" id="submit-btn">Play</button>
-      <div id="log" class="log"></div>
-    </section>
+  <!-- Game Section -->
+  <section id="game" class="card" style="display:none;">
+    <h2>Match Started</h2>
+    <p id="score" class="score">Score: 0 - 0</p>
+    <p id="turn-info" class="turn-info"></p>
+    <input type="number" id="player-input" min="1" max="6" placeholder="Enter 1-6">
+    <button class="btn play-btn" id="submit-btn">Play</button>
+    <div id="log" class="log"></div>
+  </section>
 
-    <footer>
-      <p>Developed by Siddhant</p>
-    </footer>
+  <footer>
+    <p>Developed by Siddharth</p>
+  </footer>
 
-  </div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
