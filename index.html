@@ -3,22 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hand Cricket Multiplayer</title>
+    <title>Hand Cricket Multiplayer - India Index</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 </head>
 <body>
-    <h1>Hand Cricket Multiplayer</h1>
-    <div id="game">
+    <h1>Hand Cricket Multiplayer - India Index</h1>
+
+    <!-- Lobby -->
+    <div id="lobby">
+        <h2>Lobby</h2>
+        <ul id="players"></ul>
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <!-- Game -->
+    <div id="game" style="display:none">
+        <h2>Game</h2>
         <div id="scoreboard">
-            <p id="player1-score">Player 1: 0</p>
-            <p id="player2-score">Player 2: 0</p>
+            <p id="team1-score">Team 1: 0</p>
+            <p id="team2-score">Team 2: 0</p>
         </div>
-        <div id="controls">
-            <input type="number" id="player-input" min="1" max="6" placeholder="Enter 1-6">
-            <button id="submit-btn">Play</button>
-        </div>
+        <input type="number" id="player-input" min="1" max="6" placeholder="Enter 1-6">
+        <button id="submit-btn">Play</button>
         <div id="log"></div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

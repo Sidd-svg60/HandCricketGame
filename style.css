@@ -6,7 +6,7 @@ body {
     padding: 20px;
 }
 
-#game {
+#game, #lobby {
     background-color: #fff;
     display: inline-block;
     padding: 20px;
